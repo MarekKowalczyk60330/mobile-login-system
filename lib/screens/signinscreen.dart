@@ -27,11 +27,13 @@ class _SignInScreenState extends State<SignInScreen> {
     super.dispose();
   }
 
-  void _signIn() {
+  Future<void> _signIn() async {
     setState(() => _loginError = null);
     if (!_formKey.currentState!.validate()) return;
     if (AuthService.checkCredentials(_emailCtrl.text, _passCtrl.text)) {
-      Navigator.pushReplacement(
+      await AuthService.setLoggedIn(value: true);
+      if (!mounted) return;
+      await Navigator.pushReplacement(
         context,
         MaterialPageRoute<void>(builder: (_) => const HomeScreen()),
       );
